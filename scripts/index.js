@@ -13,8 +13,7 @@
 
   let togglePasswordFields = () => {
     if (doesPageHavePasswordFields()) {
-      let oldFieldType = arePasswordFieldsShown() ? shownPasswordFieldsType : hiddenPasswordFieldsType;
-      let newFieldType = arePasswordFieldsShown() ? hiddenPasswordFieldsType : shownPasswordFieldsType;
+      let [oldFieldType, newFieldType] = arePasswordFieldsShown() ? [shownPasswordFieldsType, hiddenPasswordFieldsType] : [hiddenPasswordFieldsType, shownPasswordFieldsType];
 
       changePasswordsFieldsType(oldFieldType, newFieldType);
     }
