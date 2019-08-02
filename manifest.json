@@ -16,7 +16,7 @@
   },
   "manifest_version": 2,
   "name": "Toggle Password Fields",
-  "permissions": [ "tabs", "activeTab" ],
+  "permissions": [ "tabs" ],
   "short_name": "Toggle Password Fields",
   "version": "0.0.1.0"
 }
