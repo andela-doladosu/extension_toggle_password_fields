@@ -1,43 +1,36 @@
 (function () {
-	const shownPasswordFieldsType = 'shown-passwords';
+  const shownPasswordFieldsType = 'shown-password';
+  const hiddenPasswordFieldsType = 'password';
+  const shownPasswordFieldsSelector = `input[type=${shownPasswordFieldsType}]`;
+  const hiddenPasswordFieldsSelector =  `input[type=${hiddenPasswordFieldsType}]`;
+  const fieldTypeSelectors = {
+    [shownPasswordFieldsType]: shownPasswordFieldsSelector,
+    [hiddenPasswordFieldsType]: hiddenPasswordFieldsSelector
+  };
 
-	let togglePasswordFields = () => {
-		if (arePasswordFieldsShown()) {
-			hidePasswordFields();
-		} else {
-			showPasswordFields();
-		}
-	}
+  let doesPageHavePasswordFields = () => !!document.querySelector(hiddenPasswordFieldsSelector) || !!document.querySelector(shownPasswordFieldsSelector);
+  let arePasswordFieldsShown = () => !!document.querySelector(shownPasswordFieldsSelector);
 
-	let showPasswordFields = () => {
-		if (doesPageHavePasswordFields()) {
-			let passwordFields = document.querySelectorAll('input[type=password]');
+  let togglePasswordFields = () => {
+    if (doesPageHavePasswordFields()) {
+      let oldFieldType = arePasswordFieldsShown() ? shownPasswordFieldsType : hiddenPasswordFieldsType;
+      let newFieldType = arePasswordFieldsShown() ? hiddenPasswordFieldsType : shownPasswordFieldsType;
 
-			for (let i = 0; i < passwordFields.length; i++) {
-				passwordFields[i].type = shownPasswordFieldsType;
-			}
-		}
-	}
+      changePasswordsFieldsType(oldFieldType, newFieldType);
+    }
+  }
 
-	let hidePasswordFields = () => {
-			let passwordFields = document.querySelectorAll(`input[type=${shownPasswordFieldsType}]`);
+  let changePasswordsFieldsType = (oldFieldType, newFieldType) => {
+    let passwordFields = document.querySelectorAll(fieldTypeSelectors[oldFieldType]);
 
-			for (let j = 0; j < passwordFields.length; j++) {
-				passwordFields[j].type = 'password';
-			}
-	}
-
-	let doesPageHavePasswordFields = () => {
-		return !!document.querySelector('input[type=password]');
-	}
-
-	let arePasswordFieldsShown = () => {
-		return !!document.querySelector(`input[type=${shownPasswordFieldsType}]`);
-	}
+    for (let i = 0; i < passwordFields.length; i++) {
+      passwordFields[i].type = newFieldType;
+    }
+  }
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === 'togglePasswordFields') {
-    	togglePasswordFields();	
+      togglePasswordFields();
     }
   });
 })();
